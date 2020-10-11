@@ -37,7 +37,11 @@ $ git clone https://github.com/jpfeltracco/vartypes.git
 $ cd vartypes
 $ mkdir build
 $ cd build
-$ cmake ..
+$ cmake --version
+# for older cmake than 3.11 uncomment
+$ cmake .. 
+# for newer cmake
+$ cmake -D OpenGL_GL_PREFERENCE=LEGACY  ..
 $ make
 $ sudo make install
 ```
