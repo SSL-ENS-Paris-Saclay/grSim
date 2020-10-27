@@ -37,11 +37,7 @@ $ git clone https://github.com/jpfeltracco/vartypes.git
 $ cd vartypes
 $ mkdir build
 $ cd build
-$ cmake --version
-# for older cmake than 3.11 uncomment
 $ cmake .. 
-# for newer cmake
-$ cmake -D OpenGL_GL_PREFERENCE=LEGACY  ..
 $ make
 $ sudo make install
 ```
@@ -61,10 +57,10 @@ $ mkdir build
 $ cd build
 ```
 
-Run CMake to generate the makefiles:
+Run CMake to generate the makefiles (use `-D OpenGL_GL_PREFERENCE=LEGACY` because `LEGACY` is no longer the default setting for CMake version greater than 3.11):
 
 ```bash
-$ cmake ..
+$ cmake cmake -D OpenGL_GL_PREFERENCE=LEGACY ..
 ```
 
 Then compile the program:
