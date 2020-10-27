@@ -39,9 +39,10 @@ GLWidget::GLWidget(QWidget *parent, ConfigWidget* _cfg)
     forms[2] = new RobotsFomation(1, cfg);  //inside type 1
     forms[3] = new RobotsFomation(2, cfg);  //inside type 2
     forms[4] = new RobotsFomation(3, cfg);  //inside type 1
-    //forms[5] = new RobotsFomation(4);  //inside type 2
+    forms[5] = new RobotsFomation(5, cfg);  // 2 inside other outside PSL field (added by B Denis nov 2019)
 
-    ssl = new SSLWorld(this,cfg,forms[2],forms[2]);
+    // ssl = new SSLWorld(this,cfg,forms[2],forms[2]);
+    ssl = new SSLWorld(this,cfg,forms[5],forms[5]);
     Current_robot = 0;
     Current_team = 0;
     cammode = CameraMode::BIRDS_EYE_FROM_TOUCH_LINE;
@@ -51,12 +52,14 @@ GLWidget::GLWidget(QWidget *parent, ConfigWidget* _cfg)
     yellowRobotsMenu = new QMenu("&Yellow Robots");
     blueRobotsMenu->addAction(tr("Put all inside with formation 1"));
     blueRobotsMenu->addAction(tr("Put all inside with formation 2"));
+    blueRobotsMenu->addAction(tr("Put 2 inside other outside (PSL)")); // added by B Denis nov 2019
     blueRobotsMenu->addAction(tr("Put all outside"));
     blueRobotsMenu->addAction(tr("Put all out of field"));
     blueRobotsMenu->addAction(tr("Turn all off"));
     blueRobotsMenu->addAction(tr("Turn all on"));
     yellowRobotsMenu->addAction(tr("Put all inside with formation 1"));
     yellowRobotsMenu->addAction(tr("Put all inside with formation 2"));
+    yellowRobotsMenu->addAction(tr("Put 2 inside other outside (PSL)")); // added by B Denis nov 2019
     yellowRobotsMenu->addAction(tr("Put all outside"));
     yellowRobotsMenu->addAction(tr("Put all out of field"));
     yellowRobotsMenu->addAction(tr("Turn all off"));
@@ -405,17 +408,27 @@ void GLWidget::changeCameraMode()
     cammode = static_cast<CameraMode>(static_cast<int>(cammode)%(static_cast<int>(CameraMode::MAX_ACTIVE_MODE_FOR_CHANGEMODE)+1));
 
     if (cammode==CameraMode::BIRDS_EYE_FROM_TOUCH_LINE)
-        ssl->g->setViewpoint(0,-(cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,3,90,-45,0);
+//      modified to fit better to PSL field size - B. Denis dec 2019
+//        ssl->g->setViewpoint(0,-(cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,3,90,-45,0);
+        ssl->g->setViewpoint(0,-(cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,2,90,-65,0);
     else if (cammode==CameraMode::CURRENT_ROBOT_VIEW)
         ssl->g->getViewpoint(xyz,hpr);
     else if (cammode==CameraMode::TOP_VIEW)
-        ssl->g->setViewpoint(0,0,5,0,-90,0);
+//      modified to fit better to PSL field size - B. Denis dec 2019
+//        ssl->g->setViewpoint(0,0,5,0,-90,0);
+        ssl->g->setViewpoint(0,0,3,90,-90,0); 
     else if (cammode==CameraMode::BIRDS_EYE_FROM_OPPOSITE_TOUCH_LINE)
-        ssl->g->setViewpoint(0, (cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,3,270,-45,0);
+//      modified to fit better to PSL field size - B. Denis dec 2019
+//        ssl->g->setViewpoint(0, (cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,3,270,-45,0);
+        ssl->g->setViewpoint(0, (cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,2,270,-60,0);
     else if (cammode==CameraMode::BIRDS_EYE_FROM_BLUE)
-        ssl->g->setViewpoint(-(cfg->Field_Length()+cfg->Field_Margin()*2.0f)/2.0f,0,3,0,-45,0);
+//      modified to fit better to PSL field size - B. Denis dec 2019
+//        ssl->g->setViewpoint(-(cfg->Field_Length()+cfg->Field_Margin()*2.0f)/2.0f,0,3,0,-45,0);
+        ssl->g->setViewpoint(-(cfg->Field_Length()+cfg->Field_Margin()*2.0f)/2.0f,0,2,0,-00,0);
     else if (cammode==CameraMode::BIRDS_EYE_FROM_YELLOW)
-        ssl->g->setViewpoint((cfg->Field_Length()+cfg->Field_Margin()*2.0f)/2.0f,0,3,180,-45,0);
+//      modified to fit better to PSL field size - B. Denis dec 2019
+//        ssl->g->setViewpoint((cfg->Field_Length()+cfg->Field_Margin()*2.0f)/2.0f,0,3,180,-45,0);
+        ssl->g->setViewpoint((cfg->Field_Length()+cfg->Field_Margin()*2.0f)/2.0f,0,2,180,-60,0);
 }
 
 void GLWidget::putBall(dReal x,dReal y)
@@ -509,6 +522,7 @@ void GLWidget::reform(int team,const QString& act)
 {
     if (act==tr("Put all inside with formation 1")) forms[2]->resetRobots(ssl->robots,team);
     if (act==tr("Put all inside with formation 2")) forms[3]->resetRobots(ssl->robots,team);
+    if (act==tr("Put 2 inside other outside (PSL)")) forms[5]->resetRobots(ssl->robots,team); // added by B. Denis, nov 2019
     if (act==tr("Put all outside")) forms[1]->resetRobots(ssl->robots,team);
     if (act==tr("Put all out of field")) forms[4]->resetRobots(ssl->robots,team);
 

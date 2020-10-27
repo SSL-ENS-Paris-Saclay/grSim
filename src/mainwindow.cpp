@@ -417,8 +417,10 @@ void MainWindow::changeBallDamping()
 void MainWindow::restartSimulator()
 {        
     delete glwidget->ssl;
-    glwidget->ssl = new SSLWorld(glwidget,glwidget->cfg,glwidget->forms[2],glwidget->forms[2]);
-    glwidget->ssl->glinit();
+    /* change robot formation from 2 to 5 (Division PSL) - B Denis, nov 2019 */
+    // glwidget->ssl = new SSLWorld(glwidget,glwidget->cfg,glwidget->forms[2],glwidget->forms[2]);
+    glwidget->ssl = new SSLWorld(glwidget,glwidget->cfg,glwidget->forms[5],glwidget->forms[5]); // new formation, B Denis, nov 2019
+     glwidget->ssl->glinit();
     glwidget->ssl->visionServer = visionServer;
     glwidget->ssl->commandSocket = commandSocket;
     glwidget->ssl->blueStatusSocket = blueStatusSocket;

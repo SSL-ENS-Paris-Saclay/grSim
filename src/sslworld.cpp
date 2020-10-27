@@ -144,7 +144,9 @@ SSLWorld::SSLWorld(QGLWidget* parent,ConfigWidget* _cfg,RobotsFomation *form1,Ro
     last_dt = -1;    
     g = new CGraphics(parent);
     g->setSphereQuality(1);
-    g->setViewpoint(0,-(cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,3,90,-45,0);
+    // modified to fit better to PSL field size - B. Denis dec 2019
+    // g->setViewpoint(0,-(cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,3,90,-45,0);
+    g->setViewpoint(0,-(cfg->Field_Width()+cfg->Field_Margin()*2.0f)/2.0f,2,90,-65,0);
     p = new PWorld(0.05,9.81f,g,cfg->Robots_Count());
     ball = new PBall (0,0,0.5,cfg->BallRadius(),cfg->BallMass(), 1,0.7,0);
 
@@ -712,7 +714,8 @@ SSL_WrapperPacket* SSLWorld::generatePacket(int cam_id)
     dReal dev_x = cfg->noiseDeviation_x();
     dReal dev_y = cfg->noiseDeviation_y();
     dReal dev_a = cfg->noiseDeviation_angle();
-    if (sendGeomCount++ % cfg->sendGeometryEvery() == 0)
+    // if (sendGeomCount++ % cfg->sendGeometryEvery() == 0) // remove by B. Denis, october 2019
+    if (false) // never send field geometry - B. Denis, october 2019
     {
         SSL_GeometryData* geom = packet->mutable_geometry();
         SSL_GeometryFieldSize* field = geom->mutable_field();
@@ -963,6 +966,16 @@ cfg(_cfg)
         dReal teamPosY[MAX_ROBOT_COUNT] = { 5.00,  4.70,  5.30,  5.00,  6.50,  5.50,
                                             1.00,  1.00,  1.00,  1.00,  1.00,  1.00,
                                            -3.50, -3.50, -3.50, -3.50};
+        setAll(teamPosX,teamPosY);
+    }
+    if (type==5) // added by B Denis, nov 2019 - 2 robots in field, other outside (PSL size field)
+    {
+        dReal teamPosX[MAX_ROBOT_COUNT] = { 0.50,  0.50, -1.80, -1.50, -1.20, -0.90,
+                                           -0.60, -0.30,  0.00,  0.30,  0.60,  0.90,
+                                            1.20,  1.50,  1.80,  2.10};
+        dReal teamPosY[MAX_ROBOT_COUNT] = { 0.50, -0.50,  1.30,  1.30,  1.30,  1.30,
+                                            1.30,  1.30,  1.30,  1.30,  1.30,  1.30,
+                                            1.30,  1.30,  1.30,  1.30};
         setAll(teamPosX,teamPosY);
     }
     if (type==-1) // outside
