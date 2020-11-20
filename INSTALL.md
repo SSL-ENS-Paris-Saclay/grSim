@@ -60,7 +60,7 @@ $ cd build
 Run CMake to generate the makefiles (use `-D OpenGL_GL_PREFERENCE=LEGACY` because `LEGACY` is no longer the default setting for CMake version greater than 3.11):
 
 ```bash
-$ cmake cmake -D OpenGL_GL_PREFERENCE=LEGACY ..
+$ cmake -D OpenGL_GL_PREFERENCE=LEGACY ..
 ```
 
 Then compile the program:
